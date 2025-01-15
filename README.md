@@ -20,17 +20,11 @@ property profile defined as a multi-component score.  Transfer Learning (TL)
 can be used to create or pre-train a model that generates molecules closer
 to a set of input molecules. 
 
-A paper describing the software has been published as Open Access in the
-Journal of Cheminformatics:
-[Reinvent 4: Modern AI–driven generative molecule design](https://link.springer.com/article/10.1186/s13321-024-00812-5?utm_source=rct_congratemailt&utm_medium=email&utm_campaign=oa_20240221&utm_content=10.1186/s13321-024-00812-5).
-See AUTHORS.md for references to previous papers.
+This repository provides a Python-based tool to access the inference functions of REINVENT4 via a REST API. Once the API is set up, use the OpenAD Toolkit to easily access the inference functions of REINVENT4. 
 
-This repository provides a Python-based tool to access the SMI-TED models via a REST API. Once the API is set up, use the OpenAD Toolkit to easily access the inference functions of SMI-TED. 
-
-More information on SMI-TED can be found at:<br> 
-- https://huggingface.co/ibm/materials.smi-ted
-- https://github.com/IBM/materials/tree/main
-- https://arxiv.org/abs/2407.20267
+More information on REINVENT4 can be found at:<br> 
+- https://github.com/MolecularAI/REINVENT4
+- https://link.springer.com/article/10.1186/s13321-024-00812-5
 
 More information on the OpenAD Toolkit and OpenAD Service Utilities:
 - https://accelerate.science/projects/openad
@@ -38,8 +32,6 @@ More information on the OpenAD Toolkit and OpenAD Service Utilities:
 - https://github.com/acceleratedscience/openad_service_utils
 
 --- 
-## Note:
-this current version of the code in app.py excludes all other properties other than QM9 properties. you can change this to include QM8 and Molecule Net if checkpoints avsilable by simply changing the selected algorithms list.
 
 ## Deployment Options <!-- omit from toc -->
 
