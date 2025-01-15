@@ -1,4 +1,4 @@
-<img src='images/smiling_teddy_bear.png'> 
+<img src='images/reinvent.png'> 
 
 # REINVENT4 <!-- omit from toc -->
 
