@@ -57,37 +57,30 @@ Note: All of these deployment options will allow you to access SMI-TED functions
 You will need a Python level of 3.11 & to follow these installation directions:<br>
 <br>
 
-1. Use your favorite Python environment manager (e.g., Conda, Pyenv) to create a new Python 3.11.10 environment <br>
-
-2. Activate the new environment and install the required Python modules for SMI-TED per the "Getting Started" instructions at this site (ignore the requirement to use Python 3.9): <br>
-   https://github.com/IBM/materials/<br>
+1. Create and activate a Python virtual environment, and install REINVENT4 per the "Installation" instructions at this site (ignore the requirement to use Python 3.10): <br>
+   https://github.com/MolecularAI/REINVENT4<br>
    
-3. Install the OpenAD Service Utilities in the new environment with the following command:<br>
-   `pip install git+https://github.com/acceleratedscience/openad_service_utils.git@nested_implementation`<br>
+2. Install the OpenAD Service Utilities in the new virtual environment with the following command:<br>
+   `pip install git+https://github.com/acceleratedscience/openad_service_utils.git`<br>
 
-4. Clone this repo into a new directory: <br>
-   `git clone https://github.com/acceleratedscience/openad_smi_ted`<br>
+3. Clone this repo into a new directory: <br>
+   `git clone https://github.com/acceleratedscience/openad_reinvent4`<br>
 
-5. Change directory to `openad_smi_ted`.<br>
+5. Change directory to `openad_reinvent4`.<br>
   
-6. Add the necessary environment variables used by the OpenAD service utilities:<br>
-   `source ./openad_smi_ted_bash_env.sh` <br>
-   
-7. Start the server with the following command:<br>
+6. Start the server with the following command:<br>
    `python app.py`<br>
 
-8. Open a new terminal session.
+7. Open a new terminal session.
   
-9. In the new terminal session start the OpenAD Toolkit:<br>
+8. In the new terminal session start the OpenAD Toolkit:<br>
    `openad`<br>
 
-10. At the OpenAD Toolkit command line execute the following command to create a new service for accessing the local server started in step 7:<br>
-   `catalog model service from remote 'http://127.0.0.1:8080/' as sm`<br>
+9. At the OpenAD Toolkit command line execute the following command to create a new service for accessing the local server started in step 7:<br>
+   `catalog model service from remote 'http://127.0.0.1:8080/' as props`<br>
 
 11. At the OpenAD Toolkit command line execute the following command to view the available commands:<br>
-   `sm ?`
-
-***Note***: The first time you request a particular property (e.g., "qm8-e1-cam") the OpenAD Service Utility will take some time to download and locally cache the correct models. Requests will proceed much faster once models are cached locally.  
+   `props ?`
 
 # Deployment locally via container
 <br>
