@@ -1,5 +1,3 @@
-<img src='images/reinvent.png'> 
-
 # REINVENT4 <!-- omit from toc -->
 
 [![License MIT](https://img.shields.io/github/license/acceleratedscience/openad_service_utils)](https://opensource.org/licenses/MIT)
