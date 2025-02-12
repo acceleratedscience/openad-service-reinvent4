@@ -1,0 +1,15 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: {{ .Values.image.repository }}
+  # name: {{ include "openad-model.fullname" . }}
+  labels:
+    {{- include "openad-model.labels" . | nindent 4 }}
+spec:
+  tags:
+    - name: "{{ .Values.image.tag }}"
+      from: 
+        kind: ImageStreamTag
+        name: "{{ .Values.image.repository }}:{{ .Values.image.tag}}"
+      imagePolicy:
+        scheduledPolicy: false

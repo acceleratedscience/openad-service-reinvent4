@@ -1,0 +1,36 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: {{ .Values.buildConfig.name }}
+  labels:
+    {{- include "openad-model.labels" . | nindent 4 }}
+    part-of: {{ .Release.Name }}
+spec:
+  source:
+    git:
+      uri: {{ .Values.buildConfig.gitUri }}
+      ref: {{ .Values.buildConfig.gitRef }}
+    {{- if not (empty .Values.buildConfig.sourceSecret) }}
+    sourceSecret:
+      name: {{ .Values.buildConfig.sourceSecret.name }}
+    secrets:
+      - secret:
+          name: {{ .Values.buildConfig.sourceSecret.name }}
+        destinationDir: ".ssh"
+    {{- end }}
+  strategy:
+    type: {{ .Values.buildConfig.strategy }}
+    dockerStrategy:
+      dockerfilePath: {{ .Values.buildConfig.dockerfilePath }}
+      {{- if not (empty .Values.buildConfig.sourceSecret) }}
+      env:
+        - name: SSH_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.buildConfig.sourceSecret.name }}
+              key: ssh-privatekey
+      {{- end }}
+  output:
+    to:
+      kind: ImageStreamTag
+      name: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

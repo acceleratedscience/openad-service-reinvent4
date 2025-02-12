@@ -1,0 +1,17 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "openad-model.fullname" . }}
+  annotations:
+    haproxy.router.openshift.io/timeout: 1h
+spec:
+  to:
+    kind: Service
+    name: {{ include "openad-model.fullname" . }}
+    weight: 100
+  port:
+    targetPort: http # target port service name default
+  wildcardPolicy: None
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
