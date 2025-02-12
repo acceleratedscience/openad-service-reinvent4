@@ -1,0 +1,7 @@
+# ignore everything
+*
+# allow all python files
+!*.py
+# allow buildspec files
+!requirements*.txt
+!pyproject.toml
