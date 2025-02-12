@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "openad-model.fullname" . }}-test-connection"
+  labels:
+    {{- include "openad-model.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "openad-model.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
