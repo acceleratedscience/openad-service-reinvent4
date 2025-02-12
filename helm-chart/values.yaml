@@ -1,0 +1,140 @@
+# Default values for reinvent4-service-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+buildConfig:
+  name: reinvent-build
+  gitUri: "https://github.com/acceleratedscience/openad_reinvent4.git"
+  gitRef: "main"
+  strategy: Docker
+  dockerfilePath: Dockerfile
+  sourceSecret: {}
+
+image:
+  repository: reinvent4-service
+  tag: "latest"
+  pullPolicy: IfNotPresent
+  env:
+    - HF_HOME: "/tmp/.cache/huggingface"  # Set the new variable
+    - MPLCONFIGDIR: "/tmp/.config/matplotlib"
+    - LOGGING_CONFIG_PATH: "/tmp/app.log"  # If you want to set a logging path
+    - gt4sd_local_cache_path: "/data/.openad_models"  # !important mount checkpoints to this Volume
+    - ENABLE_CACHE_RESULTS: "True"  # enable cache for inference results, enable only for deterministic models
+    # - SELECTED_ALGORITHM_APPS: QM9,QM8,molecule_net  # enable all models
+    - gt4sd_s3_bucket_algorithms: gt4sd-cos-properties-artifacts
+    - gt4sd_s3_bucket_properties: gt4sd-cos-properties-artifacts
+    - gt4sd_s3_bucket_hub_algorithms: gt4sd-cos-properties-artifacts
+    - gt4sd_s3_bucket_hub_properties: gt4sd-cos-properties-artifacts
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  # type: NodePort
+  port: 80
+  targetPort: 8080  # Internal port of your application
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources:
+  limits:
+    # nvidia.com/gpu: 1
+    cpu: 15000m  # 20 CPU cores
+    memory: "25Gi"
+  requests:
+    # nvidia.com/gpu: 1
+    cpu: 5000m   # 10 CPU cores (adjust if necessary)
+    memory: "10Gi"
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8081
+  initialDelaySeconds: 10
+  periodSeconds: 15
+  timeoutSeconds: 10
+  successThreshold: 1
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 15
+  timeoutSeconds: 10
+  successThreshold: 1
+  failureThreshold: 5
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+volumes:
+  - name: s3-data-pvc
+
+volumeMounts:
+  - name: s3-data-pvc
+    mountPath: "/data"
+
+# init container config to download s3 resources
+#aws:
+#  image: "amazon/aws-cli"
+#  s3Source: "s3://gt4sd-cos-properties-artifacts/molecules/smi_ted" # s3 source path. !important set for Deployment
+#  destination: "/data/.openad_models/properties/molecules/smi_ted"
+#  credentials: "aws-secret"
+#  region: "us-east-2"
+
+
+nodeSelector: {}
+
+tolerations: []
+  # - key: "nvidia.com/gpu"
+  #   effect: "NoSchedule"
+
+affinity: {}
