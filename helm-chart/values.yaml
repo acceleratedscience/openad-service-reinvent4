@@ -123,7 +123,7 @@ volumeMounts:
     mountPath: "/data"
 
 # init container config to download s3 resources
-#aws:
+aws: {}
 #  image: "amazon/aws-cli"
 #  s3Source: "s3://gt4sd-cos-properties-artifacts/molecules/smi_ted" # s3 source path. !important set for Deployment
 #  destination: "/data/.openad_models/properties/molecules/smi_ted"
