@@ -1,32 +1,35 @@
-# Default values for reinvent4-service-chart.
+# Default values for smi-ted-service-chart.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 buildConfig:
-  name: reinvent-build
-  gitUri: "https://github.com/acceleratedscience/openad_reinvent4.git"
-  gitRef: "main"
+  gitUri: "https://github.com/acceleratedscience/openad_reinvent4.git"  # URL of the git repository
+  gitRef: "main"  # Branch of the git repository
   strategy: Docker
-  dockerfilePath: Dockerfile
-  sourceSecret: {}
+  dockerfilePath: Dockerfile  # Path to the Dockerfile
+  sourceSecret: {}  # Secret containing the SSH keys
+    # name: ssh-privatekey
 
 image:
-  repository: reinvent4-service
   tag: "latest"
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   env:
     - HF_HOME: "/tmp/.cache/huggingface"  # Set the new variable
     - MPLCONFIGDIR: "/tmp/.config/matplotlib"
     - LOGGING_CONFIG_PATH: "/tmp/app.log"  # If you want to set a logging path
     - gt4sd_local_cache_path: "/data/.openad_models"  # !important mount checkpoints to this Volume
     - ENABLE_CACHE_RESULTS: "True"  # enable cache for inference results, enable only for deterministic models
-    # - SELECTED_ALGORITHM_APPS: QM9,QM8,molecule_net  # enable all models
     - gt4sd_s3_bucket_algorithms: gt4sd-cos-properties-artifacts
     - gt4sd_s3_bucket_properties: gt4sd-cos-properties-artifacts
     - gt4sd_s3_bucket_hub_algorithms: gt4sd-cos-properties-artifacts
     - gt4sd_s3_bucket_hub_properties: gt4sd-cos-properties-artifacts
+  envFrom: []  # List of Secrets or ConfigMaps to inject into the init container and main container
+  #   - secretRef:
+  #       name: aws-credentials
+  #   - configMapRef:
+  #       name: config-map-name
 
 nameOverride: ""
 fullnameOverride: ""
@@ -81,11 +84,11 @@ ingress:
 resources:
   limits:
     # nvidia.com/gpu: 1
-    cpu: 15000m  # 20 CPU cores
+    cpu: 15000m
     memory: "25Gi"
   requests:
     # nvidia.com/gpu: 1
-    cpu: 5000m   # 10 CPU cores (adjust if necessary)
+    cpu: 5000m
     memory: "10Gi"
 
 livenessProbe:
@@ -109,7 +112,7 @@ readinessProbe:
   failureThreshold: 5
 
 autoscaling:
-  enabled: true
+  enabled: false
   minReplicas: 1
   maxReplicas: 2
   targetCPUUtilizationPercentage: 80
@@ -123,18 +126,17 @@ volumeMounts:
     mountPath: "/data"
 
 # init container config to download s3 resources
-aws: {}
-#  image: "amazon/aws-cli"
-#  s3Source: "s3://gt4sd-cos-properties-artifacts/molecules/smi_ted" # s3 source path. !important set for Deployment
-#  destination: "/data/.openad_models/properties/molecules/smi_ted"
-#  credentials: "aws-secret"
-#  region: "us-east-2"
-
+aws:
+  # args: # command to run in the init container. # download s3 resources from bucket ahead of time.
+  #   - "aws sync s3://<bucket-name> /data"
+  # region: 
 
 nodeSelector: {}
 
-tolerations: []
-  # - key: "nvidia.com/gpu"
-  #   effect: "NoSchedule"
+tolerations:
+  - key: "worker/cpu"
+    value: "medium"
+    effect: "NoSchedule"
+
 
 affinity: {}

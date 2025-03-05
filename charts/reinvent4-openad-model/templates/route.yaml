@@ -2,6 +2,8 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: {{ include "openad-model.fullname" . }}
+  labels:
+    {{- include "openad-model.labels" . | nindent 4 }}
   annotations:
     haproxy.router.openshift.io/timeout: 1h
 spec:
@@ -14,4 +16,4 @@ spec:
   wildcardPolicy: None
   tls:
     termination: edge
-    insecureEdgeTerminationPolicy: Allow
+    insecureEdgeTerminationPolicy: Redirect

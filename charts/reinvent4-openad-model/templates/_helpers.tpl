@@ -48,6 +48,8 @@ Selector labels
 {{- define "openad-model.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "openad-model.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/component: {{ include "openad-model.fullname" . }}
+app.kubernetes.io/part-of: {{ include "openad-model.fullname" . }}
 {{- end }}
 
 {{/*

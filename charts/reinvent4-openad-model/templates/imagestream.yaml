@@ -1,0 +1,12 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: {{ include "openad-model.fullname" . }}
+  labels:
+    {{- include "openad-model.labels" . | nindent 4 }}
+spec:
+  tags:
+    - name: "{{ .Values.image.tag | default .Chart.AppVersion }}"
+      from:
+        kind: ImageStreamTag
+        name: "{{ include "openad-model.fullname" . }}:{{ .Values.image.tag | default .Chart.AppVersion }}"

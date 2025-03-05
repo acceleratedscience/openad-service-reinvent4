@@ -4,15 +4,14 @@ metadata:
   name: {{ include "openad-model.fullname" . }}
   labels:
     {{- include "openad-model.labels" . | nindent 4 }}
-    app.kubernetes.io/component: application
     app.openshift.io/runtime: python
-    app.openshift.io/build-config: {{ .Values.buildConfig.name }}
+    app.openshift.io/build-config: {{ include "openad-model.fullname" . }}
   annotations:
-    app.openshift.io/connects-to: {{ .Values.buildConfig.name }}
+    app.openshift.io/connects-to: {{ include "openad-model.fullname" . }}
     app.openshift.io/vcs-uri: {{ .Values.buildConfig.gitUri }}
     app.openshift.io/vcs-ref: {{ .Values.buildConfig.gitRef }}
-    app.openshift.io/builds: '{"kind":"BuildConfig","namespace":"{{ .Release.Namespace }}","name":"{{ .Values.buildConfig.name }}"}'
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"{{ .Values.image.repository }}:{{ .Values.image.tag }}","namespace":"{{ .Release.Namespace }}"},"fieldPath":"spec.template.spec.containers[?(@.name==\"{{ .Chart.Name }}\")].image","pause":"false"}]'
+    app.openshift.io/builds: '{"kind":"BuildConfig","namespace":"{{ .Release.Namespace }}","name":"{{ include "openad-model.fullname" . }}"}'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"{{ include "openad-model.fullname" . }}:{{ .Values.image.tag | default .Chart.AppVersion }}","namespace":"{{ .Release.Namespace }}"},"fieldPath":"spec.template.spec.containers[?(@.name==\"{{ .Chart.Name }}\")].image","pause":"false"}]'
     app.openshift.io/build-source: '{"type":"git","git":{"uri":"{{ .Values.buildConfig.gitUri }}","ref":"{{ .Values.buildConfig.gitRef }}"}}'
 spec:
   {{- if not .Values.autoscaling.enabled }}
@@ -40,23 +39,22 @@ spec:
       serviceAccountName: {{ include "openad-model.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      {{- if and .Values.aws .Values.aws.image }}
+      {{- if .Values.aws }}
       initContainers:
         - name: init-s3-sync
-          image: {{ .Values.aws.image | quote }}
+          image: "amazon/aws-cli"
           command: ["/bin/sh", "-c"]
           args:
-            {{- if and .Values.aws.s3Source .Values.aws.destination }}
-            - "aws s3 sync {{ .Values.aws.s3Source }} {{ .Values.aws.destination }}"
+            {{- range .Values.aws.args }}
+            - {{ . | quote }}
             {{- end }}
-          {{- if .Values.aws.credentials }}
+          {{- if .Values.image.envFrom }}
           envFrom:
-          - secretRef:
-              name: {{ .Values.aws.credentials | quote }}
+            {{- toYaml .Values.image.envFrom | nindent 12 }}
+          {{- end }}
           env:
             - name: AWS_DEFAULT_REGION
               value: {{ .Values.aws.region | quote }}
-          {{- end }}
           {{- if .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml .Values.volumeMounts | nindent 12 }}
@@ -66,13 +64,9 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image:  "image-registry.openshift-image-registry.svc:5000/{{ .Release.Namespace }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image:  "image-registry.openshift-image-registry.svc:5000/{{ .Release.Namespace }}/{{ include "openad-model.fullname" . }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          # {{- if .Values.aws.credentials }}
-          # envFrom:
-          # - secretRef:
-          #     name: {{ .Values.aws.credentials | quote }}
-          # {{- end }}
+          # command: ["/bin/sh", "-c", "sleep infinity"]  # for debugging
           env:
             {{- range .Values.image.env }}
             {{- range $key, $value := . }}
@@ -80,9 +74,13 @@ spec:
               value: {{ $value | quote }}
             {{- end }}
             {{- end }}
+          {{- if .Values.image.envFrom }}
+          envFrom:
+            {{- toYaml .Values.image.envFrom | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.service.targetPort }}
               protocol: TCP
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}

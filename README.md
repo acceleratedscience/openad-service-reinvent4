@@ -107,7 +107,7 @@ You will need a Python level of 3.11 & to follow these installation directions:<
 
 Install Helm Chart
 ```shell
-helm install smi-ted ./helm-chart
+helmfile -f charts/helmfile.yaml apply
 ```
 
 Start a new build
