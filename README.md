@@ -10,6 +10,7 @@
 ## About: <!-- omit from toc -->
 <About Text needed>
 
+<!-- description -->
 REINVENT is a molecular design tool for de novo design, scaffold hopping,
 R-group replacement, linker design, molecule optimization, and other small
 molecule design tasks.  REINVENT uses a Reinforcement Learning
@@ -20,9 +21,10 @@ to a set of input molecules.
 
 This repository provides a Python-based tool to access the inference functions of REINVENT4 via a REST API. Once the API is set up, use the OpenAD Toolkit to easily access the inference functions of REINVENT4. 
 
-More information on REINVENT4 can be found at:<br> 
+More information on REINVENT4 can be found at:  
 - https://github.com/MolecularAI/REINVENT4
 - https://link.springer.com/article/10.1186/s13321-024-00812-5
+<!-- /description -->
 
 More information on the OpenAD Toolkit and OpenAD Service Utilities:
 - https://accelerate.science/projects/openad
@@ -36,13 +38,13 @@ More information on the OpenAD Toolkit and OpenAD Service Utilities:
 <!-- toc -->
 
 - [Deployment locally using a Python virtual environment](#deployment-locally-using-a-python-virtual-environment)
-
 - [Deployment locally via container](#deployment-locally-via-container)
-
-- [Deployment locally via compose](#deployment-locally-via-compose)
-
 - [Deployment On OpenShift](#deployment-on-openshift)
-
+- [Deployment locally via Compose](#deployment-locally-via-compose)
+    - [step 1:](#step-1)
+    - [step 2:](#step-2)
+    - [Step 3:](#step-3)
+    - [Notes](#notes)
 - [Deployment via Sky Pilot](#deployment-via-sky-pilot)
 
 <!-- tocstop -->
