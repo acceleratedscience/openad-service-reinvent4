@@ -10,10 +10,10 @@
 ## About
 
 <!-- description -->
-This OpenAD service provides access to the **REINVENT 4** molecular design tool, which is used for de novo design, scaffold hopping, R-group replacement, linker design, molecule optimization, and other small molecule design tasks. REINVENT uses a Reinforcement Learning (RL) algorithm to generate optimized molecules compliant with a user defined property profile defined as a multi-component score. Transfer Learning (TL) can be used to create or pre-train a model that generates molecules closer to a set of input molecules. 
+This OpenAD service provides access to the **REINVENT 4** molecular design tool, which is used for de novo design, scaffold hopping, R-group replacement, linker design, molecule optimization, and other small molecule design tasks. REINVENT uses a Reinforcement Learning (RL) algorithm to generate optimized molecules compliant with a user-defined property profile defined as a multi-component score. Transfer Learning (TL) can be used to create or pre-train a model that generates molecules closer to a set of input molecules. 
 
-More information:
-[github.com/MolecularAI/REINVENT4](https://github.com/MolecularAI/REINVENT4)
+More information:  
+[github.com/MolecularAI/REINVENT4](https://github.com/MolecularAI/REINVENT4)  
 [link.springer.com/article/10.1186/s13321-024-00812-5](https://link.springer.com/article/10.1186/s13321-024-00812-5)
 <!-- /description -->
 
