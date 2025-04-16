@@ -1,4 +1,4 @@
-# REINVENT &nbsp;/&nbsp; Inference for SMILES
+# REINVENT 4 &nbsp;/&nbsp; Inference for SMILES
 
 <!--
 The description & support tags are consumed by the generate_docs() script
