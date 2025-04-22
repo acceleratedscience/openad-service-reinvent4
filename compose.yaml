@@ -1,27 +1,27 @@
 services:
-    openad_mammal_properties:
-        image: quay.io/ibmdpdev/openad_reinvent4:latest
-        container_name: reinvent4
-        hostname: reinvent4
-        ports:
-            - "8080:8080"
-        volumes:
-            - ${HOME}/.openad_models:/tmp/.openad_models:Z
-        deploy:
-            resources:
-                reservations:
-                    devices:
-                        - capabilities: [gpu]
-        environment:
-            - GT4SD_S3_HOST=
-            - GT4SD_S3_ACCESS_KEY=
-            - GT4SD_S3_SECRET_KEY=
-            - GT4SD_S3_HOST_HUB=
-            - GT4SD_S3_ACCESS_KEY_HUB=
-            - GT4SD_S3_SECRET_KEY_HUB=
-            - gt4sd_s3_bucket_algorithms=
-            - gt4sd_s3_bucket_properties=
-            - gt4sd_s3_bucket_hub_algorithms=
-            - gt4sd_s3_bucket_hub_properties=
-            - ENABLE_CACHE_RESULTS=True
-            - ASYNC_ALLOW=True
+  openad_mammal_properties:
+    image: quay.io/ibmdpdev/openad_reinvent4:latest
+    container_name: reinvent4 
+    hostname: reinvent4
+    ports:
+      - "8080:8080"
+    volumes:
+      - ${HOME}/.openad_models:/tmp/.openad_models:Z
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    environment: 
+      - GT4SD_S3_HOST=
+      - GT4SD_S3_ACCESS_KEY=
+      - GT4SD_S3_SECRET_KEY=
+      - GT4SD_S3_HOST_HUB=
+      - GT4SD_S3_ACCESS_KEY_HUB=
+      - GT4SD_S3_SECRET_KEY_HUB=
+      - gt4sd_s3_bucket_algorithms=
+      - gt4sd_s3_bucket_properties=
+      - gt4sd_s3_bucket_hub_algorithms=
+      - gt4sd_s3_bucket_hub_properties=
+      - ENABLE_CACHE_RESULTS=True
+      - ASYNC_ALLOW=True
