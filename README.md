@@ -7,6 +7,7 @@ https://openad.accelerate.science/docs/model-service/available-services
 -->
 
 <!-- support:apple_silicon:false -->
+<!-- support:gcloud:true -->
 
 [![License MIT](https://img.shields.io/github/license/acceleratedscience/openad_service_utils)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
